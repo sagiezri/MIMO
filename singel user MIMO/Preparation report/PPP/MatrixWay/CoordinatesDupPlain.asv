@@ -1,0 +1,29 @@
+function [ coordinatesDup ] = CoordinatesDupPlain(coordinates,N,M)
+
+dupCoordinatesBaseStation = repmat(coordinatesBaseStation,9,1);
+dupcoordinatesTransmiter = repmat(coordinatesTransmiter,9,1);
+
+for i=1:8
+    for j=(i.*(length(coordinates))+1):(9.*(length(coordinates))
+    if(i==1)
+        coordinates(j,1)=coordinates(j+N,1);
+    end
+    if(i==2)
+        coordinates(j,1)=coordinates(j+N,1);
+        coordinates(j,2)=coordinates(j-M,2);
+    end
+    if(i==3)
+        coordinates(j,2)=coordinates(j-M,2);
+    end
+    if(i==4)
+        coordinates(j,1)=coordinates(j-N,1);
+        coordinates(j,2)=coordinates(j-M,2);
+    end
+        
+    end
+end
+
+
+
+end
+

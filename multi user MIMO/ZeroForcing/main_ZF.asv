@@ -1,0 +1,29 @@
+clear all;
+N = 3;
+r = ones(N,N);a=2;num_unwanted_users = 2;num_stream_each_user = [1,1];
+k0 = N-sum(num_stream_each_user);k_ZF = N - k0;
+%z_ZF = gen_data(N,k0,k_ZF,num_unwanted_users,num_stream_each_user);
+
+    size_of_data_each_user = [k0 num_stream_each_user];
+    x = cell(1,3);
+    for i = 1:length(size_of_data_each_user)
+        y = sqrt(1/2).*crandn(size_of_data_each_user(i),N);
+        x{i}=[1 ;2 ;3 ;4];
+        
+        %Z_ZF{1,i} = x;
+    end
+%     for i = 2:length(size_of_data_each_user)
+%         Z_ZF{1,i} = Z_all_data(:,sum(size_of_data_each_user(1:i-1))+1:sum(size_of_data_each_user(1:i)));
+%     end
+
+% H_other_users = gen_transmit(N,r,a,num_stream_each_user, num_unwanted_users);
+% H_ZF = reshape(H_other_users,[N,k_ZF,1]);
+% H0F0 = gen_H0F0(N,r,a,k0);
+% sum_y_interferance = zeros(N,N);
+% for i = 1:num_unwanted_users
+%     HjFj_Zj = H_other_users(:,:,i)*transpose(z_ZF(:,:,i+1));
+%    sum_y_interferance = sum_y_interferance + HjFj_Zj;
+% end
+% Y_ZF = H0F0*transpose(z_ZF(:,:,1)) + sum_y_interferance;
+% [Z_e, W_ZF] = receiver_ZF(Y_ZF,H_ZF,H0F0,N);
+% norm(W_ZF' * sum_y_interferance)
