@@ -12,6 +12,3 @@ k=1;
  end
 end
 
-
-%new add rei
-
