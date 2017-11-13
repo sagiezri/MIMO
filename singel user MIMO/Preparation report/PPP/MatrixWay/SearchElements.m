@@ -11,8 +11,3 @@ k=1;
      end
  end
 end
-<<<<<<< HEAD
-%rei
-=======
-%Sagi
->>>>>>> 661a6141267f6a10c8fe0b44d130e78d490398cf
