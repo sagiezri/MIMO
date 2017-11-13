@@ -1,7 +1,7 @@
 clear all;
 clc;
 close all;
-lambdaTx=50;
+lambdaTx=500;
 lambdaBs=20;
 areaSize=1e3;
 numPointsTx=poissrnd(lambdaTx);
@@ -23,15 +23,15 @@ end
 
 
 
-% figure(1)
-% plot(transPoints(:, 1), transPoints(:, 2), '*');
-% title('BS and Transmiters')
-% xlabel('x plain')
-% ylabel('y plain')
-% hold on
-% plot(bsPoints(:, 1), bsPoints(:, 2), 'o');
-% legend('Transmiters','BS');
-% hold off
+figure(1)
+plot(real(transPoints), imag(transPoints), '*');
+title('BS and Transmiters')
+xlabel('x plain')
+ylabel('y plain')
+hold on
+plot(real(bsPoints), imag(bsPoints), 'o');
+legend('Transmiters','BS');
+hold off
 
 
 
