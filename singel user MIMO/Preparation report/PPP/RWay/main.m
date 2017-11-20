@@ -1,35 +1,34 @@
 clear all;
 clc;
 close all;
-lambdaTx=500;
-lambdaBs=20;
-areaSize=1e3;
-numPointsTx=poissrnd(lambdaTx);
-numPointsBS=poissrnd(lambdaBs);
-transPoints = rand(numPointsTx, 2).*areaSize;
-bsPoints = rand(numPointsBS, 2).*areaSize;
-R=sqrt(2.*areaSize)./2;
+lambdaTx=0.005;
+lambdaBs=0.002;
+axisXY=100;
+numPointsTx=poissrnd(lambdaTx*axisXY.^2);
+numPointsBS=poissrnd(lambdaBs*axisXY.^2);
+transPoints = rand(numPointsTx, 2).*axisXY;
+bsPoints = rand(numPointsBS, 2).*axisXY;
+
 
 bsPoints=bsPoints(:,1)+j.*bsPoints(:,2);
 transPoints=transPoints(:,1)+j.*transPoints(:,2);
 
-r_ij=zeros(numPointsTx,numPointsBS);
+xTrans=real(transPoints);
+yTrans=imag(transPoints);
+xBS=real(bsPoints);
+yBS=imag(bsPoints);
+
 for i=1:numPointsTx
-    for j=1:numPointsBS
-     r_ij(i,j)=mod(abs(bsPoints(j)-transPoints(i)),R);
-    end
+     r_ij(i,:)=sqrt((((-axisXY./2)+mod(abs(xTrans(i)-xBS)+(axisXY./2),axisXY))).^2+(((-axisXY./2)+mod(abs(yTrans(i)-yBS)+(axisXY./2),axisXY))).^2);  
 end
 
-
-
-
 figure(1)
-plot(real(transPoints), imag(transPoints), '*');
+plot(xTrans, yTrans, '*');
 title('BS and Transmiters')
 xlabel('x plain')
 ylabel('y plain')
 hold on
-plot(real(bsPoints), imag(bsPoints), 'o');
+plot(xBS, yBS, 'o');
 legend('Transmiters','BS');
 hold off
 
