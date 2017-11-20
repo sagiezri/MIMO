@@ -1,24 +1,24 @@
 clear all;
 clc;
 close all;
-lambdaTx=500;
-lambdaBs=20;
+lambdaTx=0.05;
+lambdaBs=0.02;
 areaSize=1e3;
-numPointsTx=poissrnd(lambdaTx);
-numPointsBS=poissrnd(lambdaBs);
+numPointsTx=poissrnd(areaSize*lambdaTx);
+numPointsBS=poissrnd(areaSize*lambdaBs);
 transPoints = rand(numPointsTx, 2).*areaSize;
 bsPoints = rand(numPointsBS, 2).*areaSize;
-R=sqrt(2.*areaSize)./2;
+% R=sqrt(2.*areaSize)./2;
 
 bsPoints=bsPoints(:,1)+j.*bsPoints(:,2);
 transPoints=transPoints(:,1)+j.*transPoints(:,2);
 
-r_ij=zeros(numPointsTx,numPointsBS);
-for i=1:numPointsTx
-    for j=1:numPointsBS
-     r_ij(i,j)=mod(abs(bsPoints(j)-transPoints(i)),R);
-    end
-end
+% r_ij=zeros(numPointsTx,numPointsBS);
+% for i=1:numPointsTx
+%     for j=1:numPointsBS
+%      r_ij(i,j)=mod(abs(bsPoints(j)-transPoints(i)),R);
+%     end
+% end
 
 
 
