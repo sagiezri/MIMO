@@ -28,7 +28,7 @@ H_i = gen_random_normal_mat(N,M);
 for nc=1:length(noise_var_vec)
         noise_var=noise_var_vec(nc);
         x_e_MRC=0;x_e_ZF=0;
-       for runsCounter=1:num_of_runs
+        for runsCounter=1:num_of_runs
         
         n = gen_random_normal_mat_var(N,1,noise_var);x = gen_random_normal_mat(M,1);
         y = H_i*x+n;
@@ -36,13 +36,13 @@ for nc=1:length(noise_var_vec)
         %MRC
         W_MRC_i = H_i(:,i);
         SNR_MRC(runsCounter) = SNR_xi(W_MRC_i,H_i,noise_var,i);
-        x_Th_MRC(runsCounter)=(norm(x(i)-W_MRC_i'*y).^2)./(norm(x(i)).^2);       
+        x_Th_MRC(runsCounter)=(norm(x(i)-W_MRC_i'*y).^2);       
         
         %ZF
         W_ZF=inv(H_i');
         W_ZF_i = W_ZF(:,i);
         SNR_ZF(runsCounter) = SNR_xi(W_ZF_i,H_i,noise_var,i);
-        x_Th_ZF(runsCounter)=(norm(x(i)-W_ZF_i'*y).^2)./(norm(x(i)).^2);
+        x_Th_ZF(runsCounter)=(norm(x(i)-W_ZF_i'*y).^2);
        
         
         %MMSE
@@ -51,17 +51,12 @@ for nc=1:length(noise_var_vec)
 %         x_MMSE_e = W_MMSE_i'*y;
 %         SNR_MMSE(runsCounter) = SNR_xi(W_MMSE_i,H_i,noise_var,i);
     end
-    
     %Compute for each Var loop
     S_ZF(nc)=sum(SNR_ZF)./num_of_runs;
-    %S_MMSE(nc)=sum(SNR_MMSE)./num_of_runs;
     S_MRC(nc)=sum(SNR_MRC)./num_of_runs;
     
     S_Th_MRC(nc)=sum(x_Th_MRC)./num_of_runs;
     S_Th_ZF(nc)=sum(x_Th_ZF)./num_of_runs;
-    
-%     S_MRC_Th=S_MRC_Th+SNR_MRC_Theory;
-%     S_ZF_Th=S_ZF_Th+SNR_ZF_Theory;
 end
 
 
@@ -71,7 +66,7 @@ plot(SNRdB_rng,10*log10(S_MRC),'r',SNRdB_rng,10*log10(S_ZF),'b',SNRdB_rng,10*log
 title('SNR Vs Noise var Per method - n iterations')
 xlabel('SNR In')
 ylabel('SNR Out')
-legend('MRC','ZF','MMSE')
+legend('MRC','ZF')
 
 figure(2)
 plot(SNRdB_rng,10*log10(1./S_Th_MRC),'r',SNRdB_rng,10*log10(1./S_Th_ZF),'b');
