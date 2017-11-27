@@ -1,10 +1,12 @@
 clear all;
 num_of_runs = 100;
+
 SNRdB_rng=-30:10:60;
-S_ZF=0;S_MMSE=0;S_MRC=0;S_MRC_Th=0;S_ZF_Th=0;
-N_T=6;M=6;
 noise_var_vec=10.^(-SNRdB_rng/10);
-SNR_MRC_Theory=zeros(1,M);SNR_ZF_Theory=zeros(1,M);
+
+S_ZF=zeros(1,length(num_of_runs));S_MMSE=zeros(1,length(num_of_runs));S_MRC=zeros(1,length(num_of_runs));
+S_Th_MRC=zeros(1,length(num_of_runs));S_Th_ZF=zeros(1,length(num_of_runs));
+N=6;M=6;
 
 %'i' for x & x_estimation index
 i=5;
@@ -22,85 +24,66 @@ H = gen_random_normal_mat(N_T,M).*((r_ij).^(-a./2));
 %}
 
 
-for runsCounter=1:num_of_runs
-    for nc=1:length(noise_var_vec)
-        
-        sum_MRC_Theory=0;
-        sum_ZF_Theory=0;
+H_i = gen_random_normal_mat(N,M);
+for nc=1:length(noise_var_vec)
         noise_var=noise_var_vec(nc);
-        H = gen_random_normal_mat(N_T,M);n = gen_random_normal_mat_var(N_T,1,noise_var);x = gen_random_normal_mat(M,1);
-        y = H*x+n;
+        x_e_MRC=0;x_e_ZF=0;
+       for runsCounter=1:num_of_runs
+        
+        n = gen_random_normal_mat_var(N,1,noise_var);x = gen_random_normal_mat(M,1);
+        y = H_i*x+n;
         
         %MRC
-        W_MRC = H;
-        W_MRC_i = W_MRC(:,i);
-        x_MRC_e = W_MRC_i'*y;
-        SNR_MRC(:,nc) = SNR_xi(W_MRC,H,M,N_T,noise_var,i);
-        %Start the theoretical compute 
-        for c=1:N_T
-            sum_MRC_Theory =sum_MRC_Theory+(norm(H(c,i))).^2;
-        end
-        SNR_MRC_Theory(1,nc)=sum_MRC_Theory./noise_var;
-    
+        W_MRC_i = H_i(:,i);
+        SNR_MRC(runsCounter) = SNR_xi(W_MRC_i,H_i,noise_var,i);
+        x_Th_MRC(runsCounter)=(norm(x(i)-W_MRC_i'*y).^2)./(norm(x(i)).^2);       
+        
         %ZF
-        W_ZF=inv(H);
+        W_ZF=inv(H_i');
         W_ZF_i = W_ZF(:,i);
-        x_ZF_e = W_ZF_i'*y;
-        SNR_ZF(:,nc) = SNR_xi(W_ZF_i,H,M,N_T,noise_var,i);
-        %Start the theoretical compute
-        for c=1:N_T
-            sum_ZF_Theory=sum_ZF_Theory+norm(W_ZF(c,i)).^2;
-        end
-        SNR_ZF_Theory(1,nc)=1./(noise_var.*(sum_ZF_Theory));
+        SNR_ZF(runsCounter) = SNR_xi(W_ZF_i,H_i,noise_var,i);
+        x_Th_ZF(runsCounter)=(norm(x(i)-W_ZF_i'*y).^2)./(norm(x(i)).^2);
+       
         
         %MMSE
-        W_MMSE = inv((H*H'+eye(N_T)))*H;
-        W_MMSE_i = W_MMSE(:,i);
-        x_MMSE_e = W_MMSE_i'*y;
-        SNR_MMSE(:,nc) = SNR_xi(W_MMSE_i,H,M,N_T,noise_var,i);
+%         W_MMSE = inv((H_i*H_i'+eye(N)))*H_i;
+%         W_MMSE_i = W_MMSE(:,i);
+%         x_MMSE_e = W_MMSE_i'*y;
+%         SNR_MMSE(runsCounter) = SNR_xi(W_MMSE_i,H_i,noise_var,i);
     end
     
     %Compute for each Var loop
-    S_ZF=S_ZF+SNR_ZF;
-    S_MMSE=S_MMSE+SNR_MMSE;
-    S_MRC=S_MRC+SNR_MRC;
+    S_ZF(nc)=sum(SNR_ZF)./num_of_runs;
+    %S_MMSE(nc)=sum(SNR_MMSE)./num_of_runs;
+    S_MRC(nc)=sum(SNR_MRC)./num_of_runs;
     
-    S_MRC_Th=S_MRC_Th+SNR_MRC_Theory;
-    S_ZF_Th=S_ZF_Th+SNR_ZF_Theory;
+    S_Th_MRC(nc)=sum(x_Th_MRC)./num_of_runs;
+    S_Th_ZF(nc)=sum(x_Th_ZF)./num_of_runs;
+    
+%     S_MRC_Th=S_MRC_Th+SNR_MRC_Theory;
+%     S_ZF_Th=S_ZF_Th+SNR_ZF_Theory;
 end
 
-S_ZF=S_ZF./num_of_runs;S_MMSE=S_MMSE./num_of_runs;S_MRC=S_MRC./num_of_runs;
-
-S_MRC_Th=S_MRC_Th./num_of_runs;S_ZF_Th=S_ZF_Th./num_of_runs;
 
 
 figure(1)
-plot(noise_var_vec,SNR_MRC,'r')
-title('SNR Vs Noise var Per method - One interation')
-xlabel('Nosie Var')
-ylabel('SNR')
-hold on
-plot(noise_var_vec,SNR_ZF,'b')
-hold on
-plot(noise_var_vec,SNR_MMSE,'g')
+plot(SNRdB_rng,10*log10(S_MRC),'r',SNRdB_rng,10*log10(S_ZF),'b',SNRdB_rng,10*log10(S_MMSE),'g');
+title('SNR Vs Noise var Per method - n iterations')
+xlabel('SNR In')
+ylabel('SNR Out')
 legend('MRC','ZF','MMSE')
-hold on
 
 figure(2)
-plot(noise_var_vec,S_MRC,'r')
-title('SNR Vs Noise var Per method - n iterations')
-xlabel('Nosie Var')
-ylabel('SNR')
-hold on
-plot(noise_var_vec,S_ZF,'b')
-hold on
-plot(noise_var_vec,S_MMSE,'g')
-legend('MRC','ZF','MMSE')
-hold on
+plot(SNRdB_rng,10*log10(1./S_Th_MRC),'r',SNRdB_rng,10*log10(1./S_Th_ZF),'b');
+title('SNR Vs Noise var Per method - n iterations - Theory')
+xlabel('SNR In')
+ylabel('SNR Out')
+legend('MRC','ZF')
+
 
 %Difference between "real" SNR to the theoritical
-disp('MRC comperation - real to theoretical')
-S_MRC_Th-S_MRC
-disp('ZF comperation - real to theoretical')
-S_ZF_Th-S_ZF
+% disp('MRC comperation - real to theoretical')
+% S_MRC_Th-S_MRC
+% disp('ZF comperation - real to theoretical')
+% S_ZF_Th-S_ZF
 
