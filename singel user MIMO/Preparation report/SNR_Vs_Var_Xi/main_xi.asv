@@ -6,8 +6,9 @@ N_T=6;M=6;
 noise_var_vec=10.^(-SNRdB_rng/10);
 SNR_MRC_Theory=zeros(1,M);SNR_ZF_Theory=zeros(1,M);
 
-%'i' for x & x_estimation index
+%Index number x_i & x estimation 
 i=5;
+
 
 %For a case that we want to use the "real" H matrix
 %{
