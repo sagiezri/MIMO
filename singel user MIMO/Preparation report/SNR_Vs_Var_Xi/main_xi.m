@@ -1,6 +1,6 @@
 clear all;
 num_of_runs = 1000;
-SNRdB_rng=-60:10:60;
+SNRdB_rng=-30:10:60;
 noise_var_vec=10.^(-SNRdB_rng/10);
 
 S_ZF=zeros(1,length(num_of_runs));S_MMSE=zeros(1,length(num_of_runs));S_MRC=zeros(1,length(num_of_runs));
@@ -19,6 +19,7 @@ for nc=1:length(noise_var_vec)
         noise_var=noise_var_vec(nc);
         x_e_MRC=0;x_e_ZF=0;
     for runsCounter=1:num_of_runs
+
         
         n = gen_random_normal_mat_var(N,1,noise_var);x = gen_random_normal_mat(M,1);
         y = H_i*x+n;
@@ -35,6 +36,7 @@ for nc=1:length(noise_var_vec)
         W_ZF_i =  W_ZF_i./( W_ZF_i'*H_i(:,i));
         SNR_ZF(runsCounter) = SNR_xi(W_ZF_i,H_i,noise_var,i);
         x_Valid_ZF(runsCounter)=(norm(x(i)-W_ZF_i'*y).^2);
+
        
         
         %MMSE
@@ -44,18 +46,18 @@ for nc=1:length(noise_var_vec)
         SNR_MMSE(runsCounter) = SNR_xi(W_MMSE_i,H_i,noise_var,i);
         x_Valid_MMSE(runsCounter)=(norm(x(i)-W_MMSE_i'*y).^2);
     end
-    
     %Compute for each Var loop
     S_ZF(nc)=sum(SNR_ZF)./num_of_runs;
-    %S_MMSE(nc)=sum(SNR_MMSE)./num_of_runs;
     S_MRC(nc)=sum(SNR_MRC)./num_of_runs;
     S_MMSE(nc)=sum(SNR_MMSE)./num_of_runs;
     
+
     S_Valid_MRC(nc)=sum(x_Valid_MRC)./num_of_runs;
     S_Valid_ZF(nc)=sum(x_Valid_ZF)./num_of_runs;
     S_Valid_MMSE(nc)=sum(x_Valid_MMSE)./num_of_runs;
     
    
+
 end
 
 
