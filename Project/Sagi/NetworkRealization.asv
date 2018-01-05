@@ -1,0 +1,33 @@
+%*************************************************************************%
+%Network realization function - roles:
+%1.Calculate number of users & BS in our simulation space
+%2.Compute r_ij matrix - the distance between each user to BS
+%3.Build with r_ij & g_ij(normal disturbed values that chatisctic our
+%channel) & a the big H matrix.
+
+%Global input: a(scalar),L(scalar).
+%Input: B_avg(scalar),M_avg(scalar),lambda_b(scalar),lambda(scalar).
+%Output:B(scalar),M(scalar),r_ij(real matrix-BXM),H(complex matrix-BLXM).
+%*************************************************************************%
+
+function [B,M,r_ij,H] = NetworkRealization(B_avg,M_avg,lambda_b,lambda)
+    global a;
+    global L;
+    a=2;L=5;
+
+    [User_location,BS_location,M,B,R]=HPPP(B_avg,M_avg,lambda_b,lambda);
+ 
+    [r_ij]=Compute_r_ij(User_location,BS_location,M,B,R);
+
+    [H]=Generate_H(r_ij,M,B);    
+
+end
+
+
+    
+
+
+
+    
+
+
