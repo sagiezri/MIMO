@@ -60,9 +60,7 @@ function [H]=Generate_H(r_ij,M,B)
             %Compute H matrix - a global
             H=H.*r_ij.^(-a./2);           
 end
-
-    
-    
+  
     [H]=Generate_H(r_ij,M,B);    
 
 end
