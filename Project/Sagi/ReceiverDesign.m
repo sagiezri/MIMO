@@ -6,18 +6,23 @@
 %*************************************************************************%
 
 function [w_i]=ReceiverDesign(H_i,M,Receiver_type,Noise_var,i)
+%init w_i vector
 w_i=zeros(1,size(H_i,1));
+%Gets h_i vector
 h_i=H_i(:,i);
+%Check if we're on PZF mode
 if Receiver_type~=0
     %Sorting H_i according minimal norm by the columns ->Calculate H_i_c     
      H_i_c=H_i;
+     %Exclude h_i from the sorting
      H_i_c(:,i)=[];
-     minNormPointer=zeros(2,size(H_i_c,1));
-     minNormPointer(2,:)=abs((sqrt(sum(H_i_c.*H_i_c,2))));
-     [minNormPointer(2,:),minNormPointer(1,:)]=sort(minNormPointer(2,:));
+     %Calculate each row norm - to get the closet 
+     minNormPointer=zeros(size(H_i_c,1),1);
+     minNormPointer(:,1)=abs((sqrt(sum(H_i_c.*H_i_c,2))));
+     [minNormPointer(:,2),minNormPointer(:,1)]=sort(minNormPointer(:,1));
      %Put h_i in the first place
      H_i_c(:,1)=h_i;
-     H_i_c(:,1:size(H_i_c,1))=H_i_c(:,minNormPointer(1,:));
+     H_i_c(:,1:size(H_i_c,1))=H_i_c(:,minNormPointer(:,1));
      %All the rest sorted columns after    
      %We've in each row the w_i vector of the crosspding index.
      %1-MRC,2 and up PZF
