@@ -8,9 +8,9 @@ lambda=0.01;lambda_b=0.001;
 
 %Tests values
 %Receiver_type=4;
-Noise_var=10e-3;
+Noise_var=10e-9;
 H_i=H(1:10,:);
-i=33;
+i=45;
 %One iteration
 %  dbstop in ReceiverDesign
 %  [w_i]=ReceiverDesign(H_i,M,Receiver_type,Noise_var,i);

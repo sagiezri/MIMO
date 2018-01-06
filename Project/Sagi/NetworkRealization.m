@@ -19,13 +19,12 @@ function [B,M,r_ij,H] = NetworkRealization(B_avg,M_avg,lambda_b,lambda)
     
     
     function [User_location,BS_location,M,B,R]=HPPP(B_avg,M_avg,lambda_b,lambda)
-
             R_M=sqrt(M_avg./lambda);
             R_B=sqrt(B_avg./lambda_b);
             if R_M==R_B
                 R=R_M;          
             else
-                disp('Please enter Users & BS correspaning to thier lambda'); 
+                disp('Please enter Users & BS correspanding to thier lambda'); 
                  R=0;
             end
             %Number of Users & BS 
@@ -45,7 +44,7 @@ function [B,M,r_ij,H] = NetworkRealization(B_avg,M_avg,lambda_b,lambda)
             User_location=repelem(User_location,B,1);
             %Generate BXM matrix by duplicate each BS col
             BS_location=repelem(BS_location.',1,M);
-            %Create r_ij matrix according to the eq from the HLD
+            %Create r_ij matrix according to the Eq from the HLD
             r_ij=sqrt(((-R/2)+mod(real(User_location)-real(BS_location)+(R/2),R)).^2+((-R/2)+mod(imag(User_location)-imag(BS_location)+(R/2),R)).^2);           
 end
 
