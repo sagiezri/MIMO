@@ -17,8 +17,8 @@ if Receiver_type~=0
      H_i_no_hi=H_i;
      %Exclude h_i from the sorting
      H_i_no_hi(:,i)=[];
-     %Calculate each column norm - to get the closet tramister - we can cancel up to N-1 interference 
-     minNormPointer=abs((sqrt(sum(H_i_no_hi.*H_i_no_hi))));
+     %Calculate each column norm - to get the closet transmister - we can cancel up to N-1 interference 
+     minNormPointer=(sum(abs(H_i_no_hi)));
      [~,minNormIndex]=sort(minNormPointer(1,:));
      %Put h_i in the first place -> MRC ->PZF..
      H_i_rt=zeros(N,N);
@@ -31,14 +31,16 @@ if Receiver_type~=0
      %create H_c_i matrix
      H_c_i=H_i_rt(:,1:Receiver_type);
      %Compute w_i vector
-     w_i=H_c_i/(H_c_i'*H_c_i)*e_i;     
+     w_i=(H_c_i/(H_c_i'*H_c_i))*e_i;     
      %return a row vector
+     w_i=w_i./(w_i.'*h_i);
      w_i=w_i.';
 else
 %Receiver_type=0 - MMSE
 H_HH=H_i*H_i';
 w_i=((H_HH+Noise_var.*eye(size(H_HH,2)))\h_i);
 %return a row vector
+w_i=w_i./(w_i.'*h_i);
 w_i=w_i.';
 end
     

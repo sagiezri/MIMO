@@ -55,7 +55,7 @@ function [H]=Generate_H(L,a,r_ij,M,B)
             %Duplicate each row in r_ij to match the H matrix
             r_ij=repelem(r_ij,L,1);
             %Compute H matrix - a global
-            H=H.*r_ij.^(-a./2);           
+            H=(H.*r_ij).^(-a./2);           
 end
   
     [H]=Generate_H(L,a,r_ij,M,B);    
