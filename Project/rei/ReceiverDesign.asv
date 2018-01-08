@@ -12,7 +12,7 @@ w_i=zeros(1,N);
 %gets h_i vector
 h_i=H_i(:,i);
 %Check if we're on PZF mode
-if Receiver_type ~= 0
+if Receiver_type~=0
     %Sorting H_i according to minimal norm by the columns     
      H_i_no_hi=H_i;
      %Exclude h_i from the sorting
@@ -31,17 +31,21 @@ if Receiver_type ~= 0
      %create H_c_i matrix
      H_c_i=H_i_rt(:,1:Receiver_type);
      %Compute w_i vector
-     w_i=(H_c_i/(H_c_i'*H_c_i))*e_i; 
+     w_i=(H_c_i/(H_c_i'*H_c_i))*e_i;     
      %return a row vector
+%      w_i=w_i./(w_i.'*h_i);
+     w_i=w_i.';
      H_to_PC = zeros(N,M);
-     H_to_PC(:,1) = h_i;
-     H_to_PC(:,2:end) = H_i_no_hi(:,minNormIndex(1:end));
+     H_to_PC(1,:) = h_i;
+     H_to_PC(:,2:end) = h_i;
 else
 %Receiver_type=0 - MMSE
 H_HH=H_i*H_i';
 w_i=((H_HH+Noise_var.*eye(size(H_HH,2)))\h_i);
 %return a row vector
+% w_i=w_i./(w_i.'*h_i);
+w_i=w_i.';
 H_to_PC = H_i;
 end
-w_i =  (w_i.')./( w_i'*H_i(:,i));    
+    
 end
