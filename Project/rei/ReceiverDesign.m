@@ -19,7 +19,7 @@ if Receiver_type ~= 0
      H_i_no_hi(:,i)=[];
      %Calculate each column norm - to get the closet transmister - we can cancel up to N-1 interference 
      maxNormPointer=(sum(abs(H_i_no_hi).^2));
-     [~,maxNormIndex]=sort(maxNormPointer(1,:),'descend');
+     [~,maxNormIndex]=sort(maxNormPointer,'descend');
      %Put h_i in the first place -> MRC ->PZF..
      H_i_rt=zeros(N,N);
      H_i_rt(:,1)=h_i;
@@ -36,7 +36,8 @@ if Receiver_type ~= 0
      H_to_PC = zeros(N,M);
      H_to_PC(:,1) = h_i;
      H_to_PC(:,2:end) = H_i_no_hi(:,maxNormIndex(1:end));
-     w_i =  (w_i.')./( w_i'*H_to_PC(:,1)); 
+%      w_i =  (w_i.')./( w_i'*H_to_PC(:,1)); 
+    w_i =  (w_i.')
 else
 %Receiver_type=0 - MMSE
 H_HH=H_i*H_i';
