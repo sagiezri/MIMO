@@ -10,7 +10,7 @@
 %Output:B(scalar),M(scalar),r_ij(real matrix-BXM),H(complex matrix-BLXM).
 %*************************************************************************%
 
-function [B,M,r_ij,H] = NetworkRealization(L,a,B_avg,M_avg,lambda_b,lambda)
+function [B,M,r_ij,H] = NetworkRealization(L,a,B_avg,M_avg,lambda_b,lambda,K)
 
   
     [User_location,BS_location,M,B,R]=HPPP(B_avg,M_avg,lambda_b,lambda);
@@ -28,6 +28,8 @@ function [B,M,r_ij,H] = NetworkRealization(L,a,B_avg,M_avg,lambda_b,lambda)
             %Number of Users & BS 
             M=poissrnd(M_avg);
             B=poissrnd(B_avg);
+            M = max(M,K*L);
+            B = max(B,K);
             %Users & BS location
             User_location=zeros(1,M);
             BS_location=zeros(1,B);
