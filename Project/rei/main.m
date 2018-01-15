@@ -1,9 +1,9 @@
 close all;
 clear all;
 %Prameters
-M_B_ratio=4;lambda_b=0.002;M_avg = 20;
+M_B_ratio=4;lambda_b=0.002;M_avg = 24;
 B_avg=M_avg/M_B_ratio;lambda=lambda_b*M_B_ratio;
-L=6;a=2;K=5;
+L=6;a=2;K=4;
 SNRdB_rng=-30:10:60;noise_var_vec=10.^(-SNRdB_rng/10);
 Num_of_runs = 100;Num_noise_var = length(noise_var_vec);
 N=K*L;
@@ -32,19 +32,20 @@ help_plot = 3:round(N/6):size(MRC_to_ZF)-1;
 figure
 plot(SNRdB_rng,10*log10(MRC_to_ZF(1,:)),'*-',SNRdB_rng,10*log10(MRC_to_ZF(2,:)),'*-',SNRdB_rng,10*log10(MRC_to_ZF(help_plot,:)),SNRdB_rng,10*log10(MRC_to_ZF(end,:)),'*-')
 help_plot = [1 2 help_plot N+1];
-title('SINR(out) Vs SNR(in) M(avg) = 50 N = 24')
+title('SINR(out) Vs SNR(in) M(avg) = 24 N = 24')
 xlabel('SNR(in)     [DB]')
 ylabel('SNR(out)    [DB]')
 legend(num2str((help_plot-1)'));
 
 All_SINR=sum(All_SINR,2)./M;
+MRC_to_ZF = squeeze(All_SINR(1,1,1:end,1:end));
 help_plot2 = 3:round(N/6):size(MRC_to_ZF)-1;
 figure
 % plot(SNRdB_rng,10*log10(MRC_to_ZF(1,:)),'*-',SNRdB_rng,10*log10(MRC_to_ZF(2,:)),'*-',SNRdB_rng,10*log10(MRC_to_ZF(help_plot,:)),SNRdB_rng,10*log10(MRC_to_ZF(end,:)),'*-')
 plot(SNRdB_rng,10*log10(log2(1+MRC_to_ZF(1,:))),'*-',SNRdB_rng,10*log10(log2(1+MRC_to_ZF(2,:))),'*-',SNRdB_rng,10*log10(log2(1+MRC_to_ZF(help_plot2,:))),SNRdB_rng,10*log10(log2(1+MRC_to_ZF(end,:))),'*-')
 help_plot2 = [1 2 help_plot2 N+1];
 legend(num2str((help_plot2-1)'));
-title('Chanel capacity Vs SNR(in) M(avg) = 50 N = 24')
+title('Chanel capacity Vs SNR(in) M(avg) = 24 N = 24')
 xlabel('SNR(in)     [DB]')
 ylabel('Chanel capacity    [DB]')
 
